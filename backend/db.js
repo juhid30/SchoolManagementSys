@@ -6,6 +6,7 @@ const connectToDB = async () => {
   try {
     db = await mysql.createConnection({
       host: process.env.DB_HOST || "localhost",
+      port: process.env.DB_PORT,
       user: process.env.DB_USER || "root",
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
@@ -28,7 +29,14 @@ const connectToDB = async () => {
   }
 };
 
+const getConnection = () => {
+  if (!db) {
+    throw new Error("Database connection is not initialized");
+  }
+  return db;
+};
+
 module.exports = {
   connectToDB,
-  getConnection: () => db, // Getter for connection instance
+  getConnection, // Getter for connection instance
 };
